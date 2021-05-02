@@ -2,6 +2,7 @@ import {config} from "dotenv";
 import express from "express";
 import Cache from "./src/Cache";
 import getWeatherDataForCity from "./src/getWeatherDataForCity";
+import cors from "cors";
 
 config();
 
@@ -13,6 +14,8 @@ const port = process.env.APP_PORT || 3001;
 * Todo:
 * - Change API to http://api.openweathermap.org/data/2.5/forecast?q=Amsterdam&appid=OPENWEATHERMAPAPIKEY
 * */
+
+app.use(cors());
 
 app.get("/:city", async (req, res, next) => {
 	const {city} = req.params;
