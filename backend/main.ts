@@ -1,8 +1,8 @@
+import cors from "cors";
 import {config} from "dotenv";
 import express from "express";
 import Cache from "./src/Cache";
 import getWeatherDataForCity from "./src/getWeatherDataForCity";
-import cors from "cors";
 
 config();
 
@@ -18,11 +18,14 @@ const port = process.env.APP_PORT || 3001;
 app.use(cors());
 
 app.get("/:city", async (req, res, next) => {
-	const {city} = req.params;
+	const cities = [...req.params.city.split(",")];
 
-	if (!city) {
-		res.status(400).send(JSON.stringify({error: `City ${city} not found.`}, null, 2));
+	if (cities.length === 0) {
+		res.status(400).send(JSON.stringify({error: `Couldn't find any data.`}, null, 2));
 	}
+
+	// Todo: for now, we only support 1 city (probably will change that when we switch to openweathermap.
+	const city = cities[0];
 
 	try {
 		let data;
@@ -39,6 +42,9 @@ app.get("/:city", async (req, res, next) => {
 			cache.write(city, weatherApiData);
 
 			data = cache.read(city);
+		}
+		else{
+			console.log(`Pulling weather data for ${city} from cache...`);
 		}
 
 		res.contentType("application/json");
