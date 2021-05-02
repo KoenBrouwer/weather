@@ -1,4 +1,4 @@
-import {Box, VStack} from "@chakra-ui/react";
+import {Box, useColorModeValue, VStack} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import MapPlace from "./MapPlace";
 import getWeatherDataByCity from "./services/api";
@@ -15,6 +15,7 @@ const plaatsnamen = [
 
 const App = () => {
 	const [data, setData] = useState({});
+	const bg = useColorModeValue("#FFF", "#000");
 
 	useEffect(() => {
 		plaatsnamen.forEach(city => {
@@ -28,7 +29,7 @@ const App = () => {
 	}, []);
 
 	return (
-		<VStack h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
+		<VStack h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={bg}>
 			<Box height={"100%"} minHeight={"100vh"} width={"100%"}>
 
 				<Box maxW={"60em"}>
