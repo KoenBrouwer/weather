@@ -1,18 +1,27 @@
-import {Box, HStack, Stack, Text, VStack} from "@chakra-ui/react";
+import {Box, VStack} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
+import MapPlace from "./MapPlace";
 import getWeatherDataByCity from "./services/api";
+import TheMap from "./TheMap";
 
-const plaatsnamen = ["Schagen", "Utrecht", "Goes", "Groningen", "Enschede", "Sittard"];
+const plaatsnamen = [
+	{name: "Schagen", position: [241.04, 249]},
+	{name: "Utrecht", position: [298.88, 425]},
+	{name: "Goes", position: [95.15, 576]},
+	{name: "Groningen", position: [530.03, 136]},
+	{name: "Enschede", position: [544.63, 385]},
+	{name: "Sittard", position: [415.44, 696]},
+];
 
 const App = () => {
 	const [data, setData] = useState({});
 
 	useEffect(() => {
-		plaatsnamen.map(city => {
-			getWeatherDataByCity(city).then(result => {
+		plaatsnamen.forEach(city => {
+			getWeatherDataByCity(city.name).then(result => {
 				setData(data => ({
 					...data,
-					[city]: result,
+					[city.name]: result.data,
 				}));
 			});
 		});
@@ -20,19 +29,18 @@ const App = () => {
 
 	return (
 		<VStack h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
-			<HStack width={"100%"} maxWidth={"1600px"} alignItems={"flex-start"} spacing={0}>
-				<Box>
-					<Text>Sidebar here</Text>
+			<Box height={"100%"} minHeight={"100vh"} width={"100%"}>
+
+				<Box maxW={"60em"}>
+					<TheMap>
+						{plaatsnamen.map((p, i) => {
+							const weather = data[p.name] || ({} as any);
+							return (<MapPlace key={i} name={p.name} position={p.position} weather={weather} />);
+						})}
+					</TheMap>
 				</Box>
 
-				<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
-
-					<Stack>
-						<pre>{JSON.stringify(data, null, 2)}</pre>
-					</Stack>
-
-				</Box>
-			</HStack>
+			</Box>
 		</VStack>
 	);
 };

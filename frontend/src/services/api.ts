@@ -8,7 +8,7 @@ const getWeatherDataByCity = async (city: string) => {
 	return await fetch(API_URL)
 		.then(result => result.json())
 		.then(result => {
-			console.log(result);
+			return result;
 		});
 };
 

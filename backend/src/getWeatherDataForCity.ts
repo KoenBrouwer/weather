@@ -32,9 +32,7 @@ const getWeatherDataForCity = async ({city}) => {
 				};
 			});
 
-			return {
-				meestRecent: newData[0],
-			};
+			return {...newData[0]};
 		});
 };
 
